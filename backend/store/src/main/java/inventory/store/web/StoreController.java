@@ -12,55 +12,37 @@ import inventory.store.domain.ProductRepository;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin("*")
+
 public class StoreController {
 
     @Autowired
     private ProductRepository productRepository;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> productList = productRepository.findAll();
-        return new ResponseEntity<>(productList, HttpStatus.OK);
+    public List<Product> getAllProducts() {
+    	return productRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(product, HttpStatus.OK);
-    }
+    public Product getProductById(@PathVariable Long id) {
+		return productRepository.findById(id).get();
+	}
+    
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product newProduct = productRepository.save(product);
-        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
-    }
+    public Product saveProductDetails(@RequestBody Product product) {
+		return productRepository.save(product);
+	}
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        Product existingProduct = productRepository.findById(id).orElse(null);
-        if (existingProduct == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        existingProduct.setName(product.getName());
-        existingProduct.setBrand(product.getBrand());
-        existingProduct.setStock(product.getStock());
-        existingProduct.setSize(product.getSize());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setCategory(product.getCategory());
-        productRepository.save(existingProduct);
-        return new ResponseEntity<>(existingProduct, HttpStatus.OK);
-    }
+    public Product updateProduct(@RequestBody Product product) {
+		return productRepository.save(product);
+	}
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long id) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        productRepository.delete(product);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    public ResponseEntity<HttpStatus> deleteProductById(@PathVariable Long id) {
+    	productRepository.deleteById(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 }

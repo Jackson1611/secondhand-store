@@ -28,7 +28,7 @@ public class Product {
 		this.name = name;
 		this.brand = brand;
 		this.stock = stock;
-		this.stock = stock;
+		this.size = size;
 		this.price = price;
 		this.category = category;
 	}
