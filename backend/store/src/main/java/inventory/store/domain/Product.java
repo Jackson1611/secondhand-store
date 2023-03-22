@@ -18,12 +18,9 @@ public class Product {
 	private int stock;
 	private String size;
 	private double price;
+	private String category;
 
-	@ManyToOne
-	@JoinColumn(name = "categoryid")
-	private Category category;
-
-	public Product(String name, String brand, int stock, String size, double price, Category category) {
+	public Product(String name, String brand, int stock, String size, double price, String category) {
 		super();
 		this.name = name;
 		this.brand = brand;
@@ -90,11 +87,11 @@ public class Product {
 		this.price = price;
 	}
 
-	public Category getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 
