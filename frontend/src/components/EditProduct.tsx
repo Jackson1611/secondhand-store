@@ -7,18 +7,21 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function Addproduct(props: any) {
+export default function Editproduct(props: any) {
   const [open, setOpen] = useState(false);
+  const [id, setId] = useState<number | null>(null);
   const [product, setProduct] = useState({
     name: "",
     brand: "",
-    stock: "",
+    stock: 0,
     size: "",
-    price: "",
+    price: 0,
     category: "",
   });
 
   const handleClickOpen = () => {
+    setId(props.product.id);
+    setProduct(props.product);
     setOpen(true);
   };
 
@@ -26,41 +29,33 @@ export default function Addproduct(props: any) {
     setOpen(false);
   };
 
-  const handleInputChange = (e: any) => {
-    setProduct({ ...product, [e.target.name]: e.target.value });
+  const handleSubmit = () => {
+    props.updateProduct(product, id);
+    handleClose();
   };
 
-  const addProduct = () => {
-    props.saveProduct(product);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target;
+    const value =
+      target.type === "number" ? parseInt(target.value) : target.value;
+    const name = target.name;
+
     setProduct({
-      name: "",
-      brand: "",
-      stock: "",
-      size: "",
-      price: "",
-      category: "",
+      ...product,
+      [name]: value,
     });
-    handleClose();
   };
 
   return (
     <div>
-      <Button
-        style={{ margin: 10, fontSize: "20px" }}
-        variant="outlined"
-        size="large"
-        onClick={handleClickOpen}
-      >
-        Add Product
-      </Button>
+      <button onClick={handleClickOpen}>Edit</button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Product</DialogTitle>
+        <DialogTitle>Edit Product</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Product Name"
-            type="text"
+            label="Name"
             name="name"
             value={product.name}
             onChange={handleInputChange}
@@ -69,7 +64,6 @@ export default function Addproduct(props: any) {
           <TextField
             margin="dense"
             label="Brand"
-            type="text"
             name="brand"
             value={product.brand}
             onChange={handleInputChange}
@@ -78,8 +72,8 @@ export default function Addproduct(props: any) {
           <TextField
             margin="dense"
             label="Stock"
-            type="text"
             name="stock"
+            type="number"
             value={product.stock}
             onChange={handleInputChange}
             fullWidth
@@ -87,7 +81,6 @@ export default function Addproduct(props: any) {
           <TextField
             margin="dense"
             label="Size"
-            type="text"
             name="size"
             value={product.size}
             onChange={handleInputChange}
@@ -96,8 +89,8 @@ export default function Addproduct(props: any) {
           <TextField
             margin="dense"
             label="Price"
-            type="text"
             name="price"
+            type="number"
             value={product.price}
             onChange={handleInputChange}
             fullWidth
@@ -105,7 +98,6 @@ export default function Addproduct(props: any) {
           <TextField
             margin="dense"
             label="Category"
-            type="text"
             name="category"
             value={product.category}
             onChange={handleInputChange}
@@ -114,7 +106,7 @@ export default function Addproduct(props: any) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={addProduct}>Add</Button>
+          <Button onClick={handleSubmit}>Save</Button>
         </DialogActions>
       </Dialog>
     </div>
