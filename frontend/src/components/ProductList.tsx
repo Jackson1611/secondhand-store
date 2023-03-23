@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbar,
+  GridToolbarQuickFilter,
+  GridLogicOperator,
+} from "@mui/x-data-grid";
 import Addproduct from "./AddProduct";
 import Editproduct from "./EditProduct";
+import Box from "@mui/material/Box";
 
 interface Product {
   id: number;
@@ -72,6 +79,29 @@ const ProductList = () => {
     return total.toFixed(2);
   };
 
+  function QuickSearchToolbar() {
+    return (
+      <Box
+        sx={{
+          p: 0.5,
+          pb: 0,
+          display: "flex",
+          justifyContent: "flex-start",
+          padding: "10px",
+        }}
+      >
+        <GridToolbarQuickFilter
+          quickFilterParser={(searchInput: string) =>
+            searchInput
+              .split(",")
+              .map((value) => value.trim())
+              .filter((value) => value !== "")
+          }
+        />
+      </Box>
+    );
+  }
+
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", width: 200, editable: true },
     { field: "brand", headerName: "Brand", width: 150, editable: true },
@@ -116,11 +146,25 @@ const ProductList = () => {
   ];
 
   return (
-    <div style={{ height: 650, width: "100%", justifyContent: "center" }}>
+    <div
+      style={{
+        height: 650,
+        width: "100%",
+        justifyContent: "center",
+        marginTop: -150,
+      }}
+    >
       <h1>INVENTORY</h1>
       <h2>Total value: ${getTotalInventoryPrice()}</h2>
       <DataGrid
-        slots={{ toolbar: GridToolbar }}
+        slots={{
+          toolbar: () => (
+            <React.Fragment>
+              <QuickSearchToolbar />
+              <GridToolbar />
+            </React.Fragment>
+          ),
+        }}
         rows={products}
         columns={columns}
         pagination
