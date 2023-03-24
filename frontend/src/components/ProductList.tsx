@@ -151,7 +151,7 @@ const ProductList = () => {
         height: 650,
         width: "100%",
         justifyContent: "center",
-        marginTop: -150,
+        marginTop: -300,
       }}
     >
       <h1>INVENTORY</h1>

@@ -16,8 +16,10 @@ import inventory.store.domain.ProductRepository;
 
 public class StoreController {
 
+	
     @Autowired
     private ProductRepository productRepository;
+ 
 
     @GetMapping
     public List<Product> getAllProducts() {
